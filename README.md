@@ -1,5 +1,7 @@
 # kube-ansible
- 
+ Anisble Playbooks to install the pre-requisites, required packages for the K8S envrionment and configure a Master and 2 Worker nodes.
+
+
 #### Pre-requisite
 -  Ubuntu Nodes
 -  1 Master Node and 2 Worker Nodes
