@@ -8,7 +8,7 @@ Nodes Resolvable from local machine with below mentioned hostnames.
 
 ## Following is the ansible hostfile with the Master and Worker node details. 
 ##cat hosts 
-===
+
 [master]
 kube-master  new_hostname=kube-master
 [workers]
@@ -17,14 +17,14 @@ kube-worker2 new_hostname=kube-worker2
 [all:vars]
 ansible_user= {{ vm_user }}
 ansible_sudo_pass= {{ vm_pass}}
-===
+
 
 ##Username and Passwords saved on the secret-vars.yml file.
 ##cat secret-vars.yml 
-===
+
 vm_user: "XXXXXX"
 vm_pass: "XXXXXXXXXX"
-===
+
 
 ##Checking the ansible can ping to all the nodes.
 ansible all -m ping -o -e @secret-vars.yml
