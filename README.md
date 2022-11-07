@@ -1,10 +1,9 @@
 # kube-ansible
  
-## 
-Pre-requisite
-> Ubuntu Nodes
-> 1 Master Node and 2 Worker Nodes
-> Nodes Resolvable from local machine with below mentioned hostnames.
+## Pre-requisite
+-  Ubuntu Nodes
+-  1 Master Node and 2 Worker Nodes
+-  Nodes Resolvable from local machine with below mentioned hostnames.
 
 ## Following is the ansible hostfile with the Master and Worker node details. 
 cat hosts 
