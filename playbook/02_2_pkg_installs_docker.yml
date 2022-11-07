@@ -1,0 +1,128 @@
+- hosts: "master, workers"
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+  
+  tasks:
+   - name: Copying the host file
+     copy:
+      src: /etc/hosts
+      dest: /etc/hosts
+      owner: root
+      group: root
+
+   - name: "Updating hostnames"
+     hostname:
+      name: "{{ new_hostname }}"
+
+   - name: Make the Swap inactive
+     command: swapoff -a
+
+   - name: Remove Swap entry from /etc/fstab.
+     lineinfile:
+       dest: /etc/fstab
+       regexp: swap
+       state: absent
+
+   - name: Installing Prerequisites for Kubernetes
+     apt: 
+       name:
+         - apt-transport-https
+         - ca-certificates
+         - curl
+         - gnupg-agent
+         - vim
+         - software-properties-common
+       state: present
+
+   - name: Add Docker’s official GPG key
+     apt_key:
+       url: https://download.docker.com/linux/ubuntu/gpg
+       state: present
+
+   - name: Add Docker Repository
+     apt_repository:
+       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+       state: present
+       filename: docker
+       mode: 0600
+
+   - name: Install Docker Engine.
+     apt: 
+       name:
+         - docker-ce
+         - docker-ce-cli
+         - containerd.io
+       state: present
+
+   - name: Enable service docker, and enable persistently
+     service: 
+       name: docker
+       enabled: yes
+
+   - name: Add Google official GPG key
+     apt_key:
+       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+       state: present
+
+
+   - name: Creates directory
+     file:
+       path: /etc/docker/
+       state: directory
+
+   - name: Creating a file with content
+     copy:
+       dest: "/etc/docker/daemon.json"
+       content: |
+         {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+            "max-size": "100m"
+            },
+             "storage-driver": "overlay2"
+          }
+
+
+
+   - name: restart docker
+     service:
+      name: docker
+      state: restarted
+      enabled: yes  
+
+   - name: Add Kubernetes Repository
+     apt_repository:
+       repo: deb http://apt.kubernetes.io/ kubernetes-xenial main 
+       state: present
+       filename: kubernetes
+       mode: 0600
+
+   - name: Installing Kubernetes Cluster Packages.
+     apt: 
+       name:
+         - kubeadm
+         - kubectl
+         - kubelet
+       state: present
+
+   - name: Enable service kubelet, and enable persistently
+     service: 
+       name: kubelet
+       enabled: yes
+
+   - name: Reboot all the kubernetes nodes.
+     reboot:
+      msg: "Reboot initiated by Ansible"
+      connect_timeout: 5
+      reboot_timeout: 3600
+      pre_reboot_delay: 0
+      post_reboot_delay: 30
+      test_command: whoami
+
+
+

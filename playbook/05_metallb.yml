@@ -1,0 +1,23 @@
+- hosts: master
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Initializing Metallb cluster
+    ## New link to be updated as new versions gets released
+    shell: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+    register: myshell_output
+
+  - name: Copying the Metallb config file
+    copy:
+    ## File paths needs to be updated with new config files. 
+     src: /Users/rahulraj/workspace/kube-ansible/playbook/metallb-config.yml
+     dest: $HOME/metallb-congif.yml
+
+
+  - name: Configuring Metallb cluster
+    shell: kubectl apply -f $HOME/metallb-config.yml
+    register: myshell_output
