@@ -2,12 +2,12 @@
  
 ## 
 Pre-requisite
-Ubuntu Nodes
-1 Master Node and 2 Worker Nodes
-Nodes Resolvable from local machine with below mentioned hostnames.
+> Ubuntu Nodes
+> 1 Master Node and 2 Worker Nodes
+> Nodes Resolvable from local machine with below mentioned hostnames.
 
 ## Following is the ansible hostfile with the Master and Worker node details. 
-## cat hosts 
+cat hosts 
 
 [master]
 kube-master  new_hostname=kube-master
@@ -20,7 +20,7 @@ ansible_sudo_pass= {{ vm_pass}}
 
 
 ## Username and Passwords saved on the secret-vars.yml file.
-##cat secret-vars.yml 
+cat secret-vars.yml 
 
 vm_user: "XXXXXX"
 vm_pass: "XXXXXXXXXX"
@@ -30,7 +30,7 @@ vm_pass: "XXXXXXXXXX"
 ansible all -m ping -o -e @secret-vars.yml
 
 
-## User Creation For 
+## User Creation For Abisble Operations
 ansible-playbook playbook/01_user_creation.yml -e @secret-vars.yml
 
 ## Installtion of the Container Runtime ContainerD or Dokcer, We can use accordingly
