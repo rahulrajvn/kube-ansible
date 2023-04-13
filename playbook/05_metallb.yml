@@ -14,8 +14,8 @@
   - name: Copying the Metallb config file
     copy:
     ## File paths needs to be updated with new config files. 
-     src: /Users/rahulraj/workspace/kube-ansible/playbook/metallb-config.yml
-     dest: $HOME/metallb-congif.yml
+     src: /Users/rahuladfolks/Documents/Workplace/trial-area-dont-sync/kube-ansible/playbook/metallb-config.yml
+     dest: $HOME/metallb-config.yml
 
 
   - name: Configuring Metallb cluster
