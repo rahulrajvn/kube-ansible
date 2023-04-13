@@ -31,12 +31,13 @@ vm_pass: "XXXXXXXXXX"
 > ansible all -m ping -o -e @secret-vars.yml
 
 
-#### User Creation For Abisble Operations
-> ansible-playbook playbook/01_user_creation.yml -e @secret-vars.yml
+#### User Creation For Abisble Operations and Cleaning up the Server from Docker and Continar Pkgs. 
+> ansible-playbook playbook/01_user_creation_cleanup.yml -e @secret-vars.yml
 
 #### Installtion of the Container Runtime ContainerD or Dokcer, We can use accordingly
 > ansible-playbook playbook/02_1_pkg_installs_containerd.yml -e @secret-vars.yml
 
+>> K8s with docker is not working in latest push, prefer to go with containerd.
 > ansible-playbook playbook/02_2_pkg_installs_docker.yml -e @secret-vars.yml
 
 #### Initializing the Master Nodes and Configuring Ansible local node with Kube Config file. 
@@ -49,15 +50,13 @@ vm_pass: "XXXXXXXXXX"
 #### Initialize the Metal-LB configuration with the latest config file
 > ansible-playbook playbook/05_metallb.yml -e @secret-vars.yml
 
-
 #### Deploy a Sample Nginx Deployment 
 > ansible-playbook playbook/06_sample-nginx-deployment.yml -e @secret-vars.yml
 
 #### Deploy a service to publish the deployed nginx through a load balancer. 
 > ansible-playbook playbook/07_sample-metallb-service-check.yml -e @secret-vars.yml
 
-
-
-
+#### Ansible to clean up the Master and Worker node, Removes Docker and Container
+> ansible-playbook playbook/10_cleanup.yml -e @secret-vars.yml
 
 

@@ -76,10 +76,17 @@
        
    - name: Add Docker Repository
      apt_repository:
-       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
        state: present
        filename: docker
        update_cache: yes
+
+   - name: "Update cache & Full system update"
+     apt:
+        update_cache: true
+        upgrade: dist
+        cache_valid_time: 3600
+        force_apt_get: true
 
    - name: Install containerd.
      apt: 
@@ -91,18 +98,6 @@
      file:
        path: /etc/containerd
        state: directory
-
-   - name: Configure containerd.
-     shell: /usr/bin/containerd config default > /etc/containerd/config.toml
-
-   - name: Creating containerd Config file
-     copy:
-       dest: "/etc/crictl.yaml"
-       content: |
-        runtime-endpoint: unix:///run/containerd/containerd.sock
-        image-endpoint: unix:///run/containerd/containerd.sock
-        timeout: 2
-        debug: false
 
    - name: Enable containerd service, and start it.
      systemd: 
@@ -122,6 +117,13 @@
        state: present
        filename: kubernetes
        mode: 0600
+
+   - name: "Update cache & Full system update"
+     apt:
+        update_cache: true
+        upgrade: dist
+        cache_valid_time: 3600
+        force_apt_get: true
 
    - name: Installing Kubernetes Cluster Packages.
      apt: 

@@ -45,17 +45,23 @@
 
    - name: Add Docker Repository
      apt_repository:
-       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
        state: present
        filename: docker
        mode: 0600
+
+   - name: "Update cache & Full system update"
+     apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
 
    - name: Install Docker Engine.
      apt: 
        name:
          - docker-ce
          - docker-ce-cli
-         - containerd.io
+#         - containerd.io
        state: present
 
    - name: Enable service docker, and enable persistently
@@ -68,6 +74,11 @@
        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
        state: present
 
+   - name: "Update cache & Full system update"
+     apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
 
    - name: Creates directory
      file:
@@ -87,8 +98,6 @@
              "storage-driver": "overlay2"
           }
 
-
-
    - name: restart docker
      service:
       name: docker
@@ -101,6 +110,12 @@
        state: present
        filename: kubernetes
        mode: 0600
+
+   - name: "Update cache & Full system update"
+     apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
 
    - name: Installing Kubernetes Cluster Packages.
      apt: 

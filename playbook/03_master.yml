@@ -38,7 +38,7 @@
     become_user: root
     fetch:
        src: /etc/kubernetes/admin.conf
-       dest: /Users/rahulraj/.kube/config
+       dest: /Users/rahuladfolks/.kube/config
        flat: yes
        
   - name: Get the token for joining the nodes with Kuberentes master.
