@@ -1,0 +1,18 @@
+- hosts: master
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Copying the Nginx Deployment File
+    copy:
+    ## File paths needs to be updated with new config files. 
+     src: /Users/rahuladfolks/Documents/Workplace/trial-area-dont-sync/kube-ansible/playbook/sample-nginx-deployment.yml
+     dest: $HOME/sample-nginx-deployment.yml
+
+
+  - name: Configuring Metallb cluster
+    shell: kubectl apply -f $HOME/sample-nginx-deployment.yml
+    register: myshell_output
